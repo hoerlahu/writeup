@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>A Christmas Crisis</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<h1>Tryhackme.com - A Christmas Crisis</h1>
+	<h3>Author: Uwe Hörber Datum: 09.12.2020</h3>
+
+
+	<h1>the tasks</h1>
+
+	<h3> Task 1 </h3>
+	Deploy your AttackBox (the blue "Start AttackBox" button) and the tasks machine (green button on this task) if you haven't already. Once both have deployed, open FireFox on the AttackBox and copy/paste the machines IP into the browser search bar.
+<br>
+
+	done
+<br>
+
+	<h3> Task 2 </h3>
+
+	Register for an account, and then login.
+<br>
+
+	What is the name of the cookie used for authentication?
+<br>
+
+	Debug tools im Browser oeffnen und dort den Cookie anschauen. Wir sehen, die Antwort.
+<br>
+
+	Antwort: auth
+<br>
+
+	<h3> Task 3 </h3>
+
+	In what format is the value of this cookie encoded?
+<br>
+	
+<br>
+	Hint: shorthand for binary
+<br>
+
+	Antwort: hexadecimal 
+<br>
+
+	<h3> Task 4 </h3>
+
+	Having decoded the cookie, what format is the data stored in?
+<br>
+
+	hex nach ascii decodieren (cyberchef)
+<br>
+
+	Antwort: json
+<br>
+
+	<h3> Task 5 </h3>
+
+	Figure out how to bypass the authentication.
+<br>
+
+	What is the value of Santa's cookie?
+<br>
+	
+<br>
+	in json den username zu "santa" (case sensitiv) aendern.
+<br>
+
+	nach hex enkodieren
+<br>
+
+	Antwort: 7b22636f6d70616e79223a22546865204265737420466573746976616c20436f6d70616e79222c2022757365726e616d65223a2273616e7461227d
+<br>
+
+	<h3> Task 6 </h3>
+
+	Now that you are the santa user, you can re-activate the assembly line!
+<br>
+
+	What is the flag you're given when the line is fully active?
+<br>
+
+	Antwort: THM{MjY0Yzg5NTJmY2Q1NzM1NjBmZWFhYmQy}
+<br>
+
+</html>
