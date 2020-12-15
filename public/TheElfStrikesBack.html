@@ -1,0 +1,201 @@
+<br>/
+<html>
+	<br>/
+	        <head>
+			<br>/
+			                <title>The Elf Strikes Back!</title>
+					<br>/
+					                <link rel="stylesheet" href="styles.css">
+							<br>/
+							        </head>
+								<br>/
+								        <h1>Tryhackme.com - The Elf Strikes Back!</h1>
+									<br>/
+									        <h3>Author: Uwe Hörber Datum: 14.12.2020</h3>
+										<br>/
+
+										<br>/
+
+										<br>/
+										        <h1>the tasks</h1>
+											<br>/
+
+											<br>/
+											        <h3> Task 1 </h3>
+												<br>/
+												                What string of text needs adding to the URL to get access to the upload page?
+														<br>/
+
+														<br>/
+														                Zuerst schauen wir uns die Webseite an und sehen, dass wir blockiert werden, weil unsere id nicht stimmt.
+																<br>/
+
+																<br>/
+																                <p>
+																		<br>/
+
+																		<br>/
+																		                You are not signed in
+																				<br>/
+																				                Please enter your ID as a GET parameter (?id=YOUR_ID_HERE)
+																						<br>/
+
+																						<br>/
+																						                </p>
+																								<br>/
+
+																								<br>/
+																								                also fuegen wir unsere id hinten an.
+																										<br>/
+
+																										<br>/
+																										                http://{deine IP}/?id={die ID aus den Aufgaben}
+																												<br>/
+
+																												<br>/
+																												                Antwort: /?id={deine ID}
+																														<br>/
+																														        <h3> Task 2 </h3>
+																															<br>/
+
+																															<br>/
+
+																															<br>/
+																															                What type of file is accepted by the site?
+																																	<br>/
+
+																																	<br>/
+																																	                Wir sehen jetzt einen Upload Dialog. Wenn ich auf "Select" druecke, sehe ich, dass wir nur Bilder auswaehlen sollen.
+																																			<br>/
+
+																																			<br>/
+																																			                Antwort: image
+																																					<br>/
+
+																																					<br>/
+																																					        <h3> Task 3 </h3>
+																																						<br>/
+
+																																						<br>/
+
+																																						<br>/
+																																						                Bypass the filter and upload a reverse shell.
+																																								<br>/
+
+																																								<br>/
+																																								                In which directory are the uploaded files stored?
+																																										<br>/
+
+																																										<br>/
+																																										                Erster Versuch: Wir laden einfach eine reversehell hoch. Hier bekomme ich folgenden Antwort: HTTP-200 aber folgenden Response body :
+																																												<br>/
+
+																																												<br>/
+																																												                <p>
+																																														<br>/
+																																														                        {"res":"Error","msg":"Invalid extension!"}
+																																																	<br>/
+																																																	                </p>
+																																																			<br>/
+
+																																																			<br>/
+																																																			                Okay wir sollen also den Upload Filter umgehen. Das erste, das ich probiert habe ist ein Bilddateiformat in den Dateinamen aufzunehmen.
+																																																					<br>/
+
+																																																					<br>/
+																																																					                shell.jpg.php konnte ohne Fehler hochgeladen werden.
+																																																							<br>/
+
+																																																							<br>/
+																																																							                Nun die Suche nach dem Ordner, in dem die Dateien gefunden werden koennen.
+																																																									<br>/
+
+																																																									<br>/
+																																																									                Durch kurzes rumprobieren konnte ich den Ordner "uploads" finden.
+																																																											<br>/
+
+																																																											<br>/
+																																																											                Antwort: uploads
+																																																													<br>/
+
+																																																													<br>/
+																																																													                Wie haette ich das aber ohne glueck tun koennen?
+																																																															<br>/
+
+																																																															<br>/
+																																																															                gobuster dir -u http://10.10.201.209 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt
+																																																																	<br>/
+
+																																																																	<br>/
+																																																																	                <p>
+																																																																			<br>/
+																																																																			        Error: the server returns a status code that matches the provided options for non existing urls. http://10.10.201.209/23dc85fe-7e10-4735-a9a7-53ae1dd1df55 =&gt; 200. To force processing of Wildcard responses, specify the '--wildcard' switch
+																																																																				<br>/
+
+																																																																				<br>/
+																																																																				                </p>
+																																																																						<br>/
+
+																																																																						<br>/
+																																																																						                okay also dann mit wildcard flag:
+																																																																								<br>/
+
+																																																																								<br>/
+																																																																								                gobuster dir -u http://10.10.201.209 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt --wildcard
+																																																																										<br>/
+
+																																																																										<br>/
+																																																																										                oh wow... alles kommt zurueck... das war nix
+																																																																												<br>/
+
+																																																																												<br>/
+																																																																												                dann versuchen wir das nach HTTP-codes zu filtern. evtl gibt uns das Aufschluss:
+																																																																														<br>/
+
+																																																																														<br>/
+																																																																														                gobuster dir -u http://10.10.201.209 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt --wildcard -b 200
+																																																																																<br>/
+
+																																																																																<br>/
+																																																																																                hier sehen wir nun /uploads mit 301 also einem redirect.
+																																																																																		<br>/
+
+																																																																																		<br>/
+																																																																																		        <h3> Task 4 </h3>
+																																																																																			<br>/
+
+																																																																																			<br>/
+																																																																																			                Activate your reverse shell and catch it in a netcat listener!
+																																																																																					<br>/
+
+																																																																																					<br>/
+																																																																																					                keine Antwort noetig.
+																																																																																							<br>/
+
+																																																																																							<br>/
+																																																																																							        <h3> Task 5 </h3>
+																																																																																								<br>/
+
+																																																																																								<br>/
+																																																																																								                wir laden also unsere reversehell hoch, starten netcat und clicken auf die Datei im uploads Verzeichnis.
+																																																																																										<br>/
+
+																																																																																										<br>/
+																																																																																										                nc -lvnp {dein Port}
+																																																																																												<br>/
+
+																																																																																												<br>/
+																																																																																												                wir bekommen unsere reverseshell
+																																																																																														<br>/
+
+																																																																																														<br>/
+																																																																																														                cat /var/www/flag.txt 
+																																																																																																<br>/
+
+																																																																																																<br>/
+																																																																																																                Dies gibt uns unser Flag.
+																																																																																																		<br>/
+
+																																																																																																		<br>/
+</html>
+
