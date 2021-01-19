@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Christmas Chaos</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<h1>Tryhackme.com - Christmas Chaos</h1><br>
+<h3>Author: Uwe Hörber Datum: 16.12.2020</h3><br>
+<h1>the tasks</h1><br>
+<h3> Task 1 </h3><br>
+
+
+Deploy your AttackBox (the blue "Start AttackBox" button) and the tasks machine (green button on this task) if you haven't already. Once both have deployed, open Firefox on the AttackBox and copy/paste the machines IP (10.10.121.100) into the browser search bar.
+<br>
+Antwort: keine benoetigt
+
+<h3> Task 2 </h3><br>
+
+Ziel dieser Einheit ist es mit Burp ein Login Formular mit einer Dictionary Attacke anzugreifen. <br>
+<br>
+Ich rufe die Seite auf und Konfiguriere meinen Browser so, dass er den Burp proxy nutzt. <br>
+Dann fuelle ich das Loginform aus mit Benutzer: user und Passwort: password <br>
+<br>
+Nun betrachte ich den Request in Burp. Dort sehe ich wieder user und password im plaintext im Request.<br>
+<br>
+Als naechstes schicke ich den Request im Burp an den Intruder tap. <br>
+Hier Konfiguriere ich den Angriff wie auf thm beschrieben. <br>
+<br>
+Nun starte ich den Angriff in Burp <br>
+<br>
+ich sehe nun, dass der Response bei admin:12345 eine andere Laenge hat als die anderen. <br>
+Der Versuch das in den Browser einzugeben bringt uns zum Flag. <br>
+<br>
+Das Flag findet man im angemeldeten Bereich.<br>
+
+</html>
