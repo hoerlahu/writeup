@@ -1,0 +1,222 @@
+<html>
+	<head>
+		<title>Vulnversity</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<h1> Tryhackme.com - Vulnversity</h1>
+	<h3> Author: Uwe Hörber Datum: 04.02.2021</h3>
+
+<br>
+<br>
+
+<br>
+	<h1> the tasks</h1>
+
+<br>
+<br>
+
+<br>
+	<h3> Task 1 </h3>
+	<h4> Deploy the machine</h4>
+		no answer needed
+<br>
+	<h3> Task 2 </h3>
+	<h4> cheetsheets </h4>
+	no answer needed
+<br>
+	<h4> Scan the box, how manz ports are open? </h4>
+	<p>nmap -sV -sC 10.10.49.115 -oA nmap/nmap</p>
+	dies ergibt, dass es 6 offene Ports gibt
+<br>
+	<h4> What version of the squid proxy is running on the machine?</h4>
+	3.5.12 as seen in the results of aboves query
+<br>
+	<h4> how many ports will nmap scan if the flag -p-400 was used?</h4>
+	it will scan 400 ports, siehe doku
+<br>
+	<h4> Using the nmap flag -n what will it not resolve?</h4>
+	DNS, siehe doku
+<br>
+	<h4> What is the most likely operating system this machine is running</h4>
+	in the scan result it talks about Ubuntu
+<br>
+	<h4> What port is the web server running on?</h4>
+	in the scan we can see it is running on 3333
+<br>
+	<h4> Its important to ensure you are always doing your reconnaissance thoroughly before progressing. Knowing all open services (which can all be points of exploitation) is very important, don't forget that ports on a higher range might be open so always scan ports after 1000 (even if you leave scanning in the background)</h4>
+	no answer needed.
+<br>
+	<h3> Task 3 </h3>
+	Wir sollen nun mit gobuster nach Verzeichnissen auf dem Webserver suchen.
+<br>
+
+<br>
+	<p>gobuster dir -u http://10.10.49.115:3333 -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-small.txt</p>
+
+<br>
+	<h4> no title </h4>
+	no answer needed
+<br>
+	<h4> What is the directory that has an upload form page? </h4>
+	/internal/
+<br>
+	<h3> Task 4 </h3>
+	<h4> Try upload a few file types to the server, what common extension seems to be blocked? </h4>
+	for me nothing was allowed... i tried .txt .jpg no extension at all .html .php  ....
+<br>
+
+<br>
+	the answer the author is looking for is .php though.
+<br>
+
+<br>
+	<h4> use burspsuite </h4>
+	no answer needed
+<br>
+	
+<br>
+	<h4> fuzzing the form </h4>
+	we start burp and intercept a request, then we forward this request to the intruder module
+<br>
+
+<br>
+	wir sollen jetzt php, php3, php4, php5 und phtml als Endungen probieren
+<br>
+
+<br>
+	Dazu machen wir die Dateiendung in unserem Request zu einer Variablen und fuegen die gewuenschten Endungen als Payloads ein.
+<br>
+
+<br>
+	wenn ich jetzt hier den Punkt der Endung mit in meiner Payload hatte, hat es nicht funktioniert. Wenn ich die test.{payload} hatte, hat es funktioniert. Hier scheint irgendwas kaputt zu sein.
+<br>
+
+<br>
+	Antwort: .phtml
+<br>
+
+<br>
+	<h4> upload a reverse shell </h4>
+
+<br>
+	wir laden hier eine reverse shell hoch.
+<br>
+	zuerst kopieren wir uns die reversehell in unser Arbeitsverzeichnis.
+<br>
+
+<br>
+	<p>wget https://raw.githubusercontent.com/pentestmonkey/php-reverse-shell/master/php-reverse-shell.php</p>
+	
+<br>
+	dann muessen wir die reverseshell noch anpassen und unsere IP und unseren PORT eintragen, auf dem wir lauschen.
+<br>
+
+<br>
+	<p> vim php-reverse-shell.php </p>
+
+<br>
+	unsere IP finden wir z.B. auf der tryhackme Seite ganz oben oder wenn wir ifconfig eingeben und dort das entsprechende interface auswaehlen.
+<br>
+
+<br>
+	nun muessen wir die Endung der Datei auf phtml setzen.
+<br>
+
+<br>
+	<p> mv php-reverse-shell.php reverse.phtml </p>
+
+<br>
+	nun laden wir die Datei hoch.
+<br>
+
+<br>
+	Als naechstes muessen wir unseren netcat starten und auf dem entsprechenden port lauschen.
+<br>
+
+<br>
+	<p> nc -lnvp 1234 </p>
+
+<br>
+	und dann koennen wir die Datei im /internal/uploads/ verzeichnis anclicken.
+<br>
+
+<br>
+	nun haben wir eine shell auf dem angegriffenen System.
+<br>
+
+<br>
+	Antwort: no answer needed
+<br>
+
+<br>
+	<h4> What is the name of the user who manages the webserver? </h4>
+
+<br>
+	wir navigieren in das /home/ verzeichnis und sehen dort, dass es nur einen Ordner fuer Bill gibt.
+<br>
+
+<br>
+	Antwort: Bill
+<br>
+
+<br>
+	<h4> What is the user flag? </h4>
+
+<br>
+	Das flag befindet sich im Nutzerverzeichnis von Bill.
+<br>
+
+<br>
+	<h3> Task 5 </h3>
+	<h4> On the system, search for all SUID files. What file stands out? </h4>
+
+<br>
+	Um alle SUID files zu finden nutzen wir folgenden Befehl:
+<br>
+
+<br>
+	<p> find / -user root -perm -4000 -exec ls -ldb {} \; &gt; /tmp/results.txt </p>
+
+<br>
+	um die Ergebnisse dann in einer Datei zu haben.
+<br>
+
+<br>
+	<p> which python </p>
+
+<br>
+	sagt uns, dass wir python zur Verfuegung haben, also koennen wir wahrscheinlich einen http server starten, mit dem wir diese Datei herunterladen koennen.
+<br>
+
+<br>
+	<p> 
+<br>
+	cd /tmp
+<br>
+	python -m SimpleHTTPServer 9000
+<br>
+	</p>
+
+<br>
+	Die neueste Datei sticht hier heraus, weil sie auch die groeste ist.
+<br>
+
+<br>
+	Antwort: /bin/systemctl
+<br>
+
+<br>
+	<h4> Become root and get the last flag (/root/root.txt) </h4>
+
+<br>
+	mit gtfobins finden wir einen kleinen exploit.
+<br>
+
+<br>
+	diesen fuehren wir auf dem Opfersystem aus und veraendern ihn entsprechend um uns das root flag auszugeben.
+<br>
+	Zuerst habe ich den Inhalt des /root Ordners ausgeben lassen um daraufhin dann die Datei ausgeben zu lassen.
+<br>
+	
+<br>
+</html>
