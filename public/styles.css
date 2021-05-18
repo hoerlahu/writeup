@@ -37,6 +37,10 @@ h1 {
     text-align: center;
 }
 
+h2 {
+    font-size: 3em;
+}
+
 highlight-text {
     font-size: 40;
     font-weight: 580;
@@ -64,12 +68,13 @@ section {
 }
 
 .interest-image-lock {
-    width: 80%;
+    width: max(200px, 40%);
 }
 
 .interest-image-people {
     margin-bottom: -3em;
     margin-top: -3em;
+    width: max(300px, 60%);
 }
 
 .writeups-button {
