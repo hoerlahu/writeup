@@ -1,1 +1,89 @@
+:root {
+    --background-color:#ffead1;
+    --main-color: #f1bc7f;
+    --highlight-color: #f8992c;
+    --text-color: rgb(24, 24, 24);
+    --highlight-text-color: rgb(228, 119, 17);
+    
+}
+
+.header {
+    display: block;
+    margin-left: -4em;
+    margin-right: -4em;
+    margin-top: -1em;
+    background: linear-gradient(180deg, rgba(255,234,209,1) 25%, rgba(255,201,139,1) 28%, rgba(255,201,139,1) 82%, rgba(255,234,209,1) 85%);
+}
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+    font-weight: bold;
+}
+
+a {
+    color: var(--highlight-text-color);
+}
+
+h1 {
+    font-variant-caps: all-small-caps;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+
+highlight-text {
+    font-size: 40;
+    font-weight: 580;
+    color: var(--highlight-text-color)
+}
+
+section {
+    max-width: 80%;
+    padding: 0 10% 0 10%;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: auto;
+}
+
+.container {
+    border-radius: 1em;
+    width: max(400px, 40%);
+    margin: 2em;
+    padding: 1em;
+    background-color: var(--main-color);
+}
+
+.interest-image-lock {
+    width: 80%;
+}
+
+.interest-image-people {
+    margin-bottom: -3em;
+    margin-top: -3em;
+}
+
+.writeups-button {
+    background-color: var(--highlight-color);
+    color: var(--text-color);
+    display: block;
+    width: 100%;
+    margin-top: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-radius: 1em;
+    text-decoration: unset;
+    font-size: larger;
+    font-weight: bolder;
+}
+
 p {background-color: lightgray;}
