@@ -7,6 +7,10 @@
     
 }
 
+html {
+    margin-left: 6em;
+}
+
 .header {
     display: block;
     margin-left: -4em;
@@ -42,7 +46,7 @@ h2 {
 }
 
 highlight-text {
-    font-size: 40;
+    font-size: 2em;
     font-weight: 580;
     color: var(--highlight-text-color)
 }
